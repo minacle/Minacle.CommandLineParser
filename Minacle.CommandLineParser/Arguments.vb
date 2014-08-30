@@ -17,10 +17,11 @@
     Dim optionalPrefix2 = OptionalPrefix & OptionalPrefix
     Dim flag = False
     Dim result As New Dictionary(Of String, Object)
-    For Each word In commandLineArgs
+    For wordIndex = 1 To commandLineArgs.Count - 1
+      Dim word = commandLineArgs(wordIndex)
       If word.StartsWith(OptionalPrefix) AndAlso Not flag Then
-        For i As Integer = 0 To _args.Count - 1
-          Dim arg = _args(i)
+        For argIndex As Integer = 0 To _args.Count - 1
+          Dim arg = _args(argIndex)
           Dim isLong As Boolean
           If Not TypeOf arg Is OptionalArgument Then Continue For
           Dim a = DirectCast(arg, OptionalArgument)
@@ -37,8 +38,8 @@
             If isLong Then
               result(a.Name) = CTypeDynamic(word.Substring(word.IndexOf(OptionalAssignmentOperator) + 1), a.Type)
             Else
-              i += 1
-              result(a.Name) = CTypeDynamic(commandLineArgs(i), a.Type)
+              argIndex += 1
+              result(a.Name) = CTypeDynamic(commandLineArgs(argIndex), a.Type)
             End If
           End If
         Next
